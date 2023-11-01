@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/agu_client/.idea/
+/agu_client/agu_client.iml
+/.idea/

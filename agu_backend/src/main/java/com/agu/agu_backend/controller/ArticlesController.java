@@ -18,7 +18,7 @@ public class ArticlesController {
         this.articleRepository = articleRepository;
     }
 
-    @PostMapping("/contacts")
+    @PostMapping("/articles")
     ResponseEntity<Article> createArticle(@Valid @RequestBody Article article) {
         Article result = articleRepository.save(article);
         return ResponseEntity.ok().body(result);
