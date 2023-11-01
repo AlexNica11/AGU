@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#idea
+/agu_backend/.idea/
+/agu_backend/agu_backend.iml
+/.idea/
+/agu_backend/target/
