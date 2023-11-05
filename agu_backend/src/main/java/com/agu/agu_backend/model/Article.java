@@ -1,12 +1,12 @@
 package com.agu.agu_backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Objects;
 
 @Entity
+@Data
 @Table(name="ARTICLE")
 public class Article {
 
@@ -15,17 +15,17 @@ public class Article {
     private Integer id;
 
     @Column
-    @Getter
-    @Setter
     private String author;
 
     @Column
-    @Getter
-    @Setter
+    private String title;
+
+    @Column
     private String content;
 
-    public Article(String author, String content) {
+    public Article(String author, String title, String content) {
         this.author = author;
+        this.title = title;
         this.content = content;
     }
 
@@ -51,6 +51,6 @@ public class Article {
 
     @Override
     public String toString() {
-        return "Article{author=" + author + ", content=" + content + "}" ;
+        return "Article{author=" + author + ", title=" + title + ", content=" + content + "}" ;
     }
 }

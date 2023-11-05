@@ -4,18 +4,23 @@ import com.agu.agu_backend.model.Article;
 import com.agu.agu_backend.repo.ArticleRepo;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000") // address of the client
 public class ArticlesController {
     private ArticleRepo articleRepository;
 
     public ArticlesController(ArticleRepo articleRepository) {
         this.articleRepository = articleRepository;
+    }
+
+    @GetMapping("/articles")
+    Collection<Article> articles() {
+        return (Collection<Article>) articleRepository.findAll();
     }
 
     @PostMapping("/articles")
