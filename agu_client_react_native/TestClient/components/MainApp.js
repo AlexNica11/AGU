@@ -1,8 +1,9 @@
-import {Button, View} from "react-native";
+import {Button, View, Alert} from "react-native";
 import {NavigationContainer} from "@react-navigation/native";
 import React from "react";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import ArticlesScreen from "./articles/ArticlesScreen";
 
 function HomeScreen({ navigation }) {
     return (
@@ -25,17 +26,38 @@ function NotificationsScreen({ navigation }) {
     );
 }
 
+function LogoutScreen({navigation}){
+    return (
+        Alert.alert("Logout", "Do you want to Logout?", [
+            {
+                text: 'Cancel',
+                onPress: () => {},
+                style: 'cancel'
+            },
+            {
+                text: 'Ok',
+                onPress: () => {
+                    navigation.navigate("LogIn")
+                },
+            }
+        ])
+    )
+}
+
 const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
+
+// to be added if time is available
+// const Tab = createBottomTabNavigator();
 
 function MainApp () {
     return(
         <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen name="Home" component={HomeScreen}/>
-            <Drawer.Screen name="Articles" component={NotificationsScreen} />
-            <Drawer.Screen name="Recipes" component={NotificationsScreen} />
+            <Drawer.Screen name="Articles" component={ArticlesScreen} />
+            <Drawer.Screen name="Recipes" component={ArticlesScreen} />
             <Drawer.Screen name="Find a baby" component={NotificationsScreen} />
             <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+            <Drawer.Screen name="Logout" component={LogoutScreen} />
         </Drawer.Navigator>
     )
 }
