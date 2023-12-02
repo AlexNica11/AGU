@@ -5,7 +5,7 @@ import {
     View,
     SectionList,
     StatusBar,
-    TouchableOpacity,
+    TouchableOpacity, Button,
 } from 'react-native';
 // import {TouchableOpacity} from "react-native-web";
 
@@ -31,12 +31,20 @@ const DATA = [
 function ArticlesScreen ({ navigation }) {
     return (
         <View>
+            <TouchableOpacity
+                style = {styles.submitButton}
+                onPress = { () => navigation.navigate("AddArticle") }>
+                <Text style = {styles.submitButtonText}> Add Article </Text>
+            </TouchableOpacity>
             <SectionList
                 sections={DATA}
                 keyExtractor={(item, index) => item + index}
                 renderItem={({item}) => (
-                    <TouchableOpacity style={styles.item}>
+                    <TouchableOpacity style={styles.item} onPress = {
+                        () => navigation.navigate("ArticleScreen")
+                    }>
                         <Text style={styles.title}>{item}</Text>
+                        <Text>Hint for text</Text>
                     </TouchableOpacity>
                 )}
                 renderSectionHeader={({section: {title}}) => (
@@ -64,6 +72,15 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
+    },
+    submitButton: {
+        backgroundColor: '#7a42f4',
+        padding: 10,
+        margin: 15,
+        height: 40,
+    },
+    submitButtonText:{
+        color: 'white'
     },
 });
 

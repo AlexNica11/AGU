@@ -16,23 +16,29 @@ class SignUpScreen extends Component {
         this.setState({ password: text });
     }
     signup = (username, password) => {
-        if(username !== "test"){
-            Alert.alert("Sign-up successful", "User: " + username + " has been signed up", [
-                {
-                    text: 'Ok',
-                    onPress: () => {
-                        this.props.navigation.navigate("LogIn")
+        if(!(username && password)){
+            alert('username and password cannot be empty');
+        } else
+            if(username !== "test"){
+                Alert.alert("Sign-up successful", "User: " + username + " has been signed up", [
+                    {
+                        text: 'Ok',
+                        onPress: () => {
+                            this.props.navigation.navigate("LogIn")
+                        },
                     },
-                },
-            ])
-        } else {
-            alert('Username: ' + username + "\nis already in use");
-        }
+                ])
+            } else {
+                alert('Username: ' + username + "\nis already in use");
+            }
     }
 
     render() {
         return (
             <View style = {styles.container}>
+                <Text>
+                    SignUp
+                </Text>
                 <TextInput style = {styles.input}
                            underlineColorAndroid = "transparent"
                            placeholder = "Username"

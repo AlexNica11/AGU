@@ -20,16 +20,22 @@ class LoginScreen extends Component {
     }
     login = (username, password) => {
         // enable the if and else for authentication
-        if(username === "test" && password === "test"){
-            this.props.navigation.navigate("MainApp");
-        } else {
-            alert('username: ' + username + ' password: ' + password + "\nis not a valid user");
-        }
+        if(!(username && password)){
+            alert('username and password cannot be empty');
+        } else
+            if(username === "test" && password === "test"){
+                this.props.navigation.navigate("MainApp");
+            } else {
+                alert('username: ' + username + ' password: ' + password + "\nis not a valid user");
+            }
     }
 
     render() {
         return (
             <View style = {styles.container}>
+                <Text>
+                    LogIn
+                </Text>
                 <TextInput style = {styles.input}
                            underlineColorAndroid = "transparent"
                            placeholder = "Username"
