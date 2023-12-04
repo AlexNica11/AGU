@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "agu_client",
+    "slug": "agu_client",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "agu_client"
+}
