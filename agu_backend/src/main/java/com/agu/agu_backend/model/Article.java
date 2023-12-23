@@ -1,32 +1,47 @@
 package com.agu.agu_backend.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Entity
-@Data
-@Table(name="ARTICLE")
+@Document
 public class Article {
 
     @Id
-    @GeneratedValue
-    private Integer id;
+    @Getter
+    private String id;
 
-    @Column
+    @Indexed
+    @NonNull
+    @Getter
+    @Setter
     private String author;
 
-    @Column
+    @Indexed
+    @NonNull
+    @Getter
+    @Setter
     private String title;
 
-    @Column
+    @Getter
+    @Setter
     private String content;
 
-    public Article(String author, String title, String content) {
+    @Getter
+    @Setter
+    private String videoLink;
+
+    public Article(String author, String title, String content, String videoLink) {
         this.author = author;
         this.title = title;
         this.content = content;
+        this.videoLink = videoLink;
     }
 
     protected Article(){
@@ -51,6 +66,12 @@ public class Article {
 
     @Override
     public String toString() {
-        return "Article{author=" + author + ", title=" + title + ", content=" + content + "}" ;
+        return "Article{" +
+                "id=" + id +
+                ", author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", videoLink='" + videoLink + '\'' +
+                '}';
     }
 }
