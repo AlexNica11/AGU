@@ -17,7 +17,7 @@ class SignUpScreen extends Component {
     }
     signup = (username, password) => {
         if(!(username && password)){
-            alert('username and password cannot be empty');
+            alert('Username and password cannot be empty');
         } else
             if(username !== "test"){
                 Alert.alert("Sign-up successful", "User: " + username + " has been signed up", [

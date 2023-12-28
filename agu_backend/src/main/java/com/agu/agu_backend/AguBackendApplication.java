@@ -28,8 +28,8 @@ public class AguBackendApplication implements CommandLineRunner {
 	}
 
 	private void createAllArticles(){
-		IntStream.range(0, 10).forEach( i -> {
-			articleService.createArticle("author" + i, "title" + i, "content" + i, "videoLink" + i);
-		});
+//		IntStream.range(0, 10).forEach( i -> {
+//			articleService.createArticle("author" + i, "title" + i, "content" + i, "videoLink" + i);
+//		});
 	}
 }

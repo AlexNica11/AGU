@@ -1,9 +1,13 @@
-import React, { useState, useCallback, useRef } from "react";
-import {Alert, Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import {Alert, Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
+import {serverIp} from "../env/Variables";
 
-export default function ArticleScreen({navigation}) {
+export default function ArticleScreen({route, navigation}) {
     const [playing, setPlaying] = useState(false);
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const articleID = route.params.articleId;
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
@@ -16,32 +20,73 @@ export default function ArticleScreen({navigation}) {
         setPlaying((prev) => !prev);
     }, []);
 
+    const deleteArticle = async () => {
+        try {
+            const response = await fetch(serverIp + '/articles/' + articleID, {
+                method : 'DELETE'
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            navigation.goBack();
+        }
+    }
+
+    const getArticle = async () => {
+        try {
+            const response = await fetch(serverIp + '/articles/' + articleID, {
+                method : 'GET'
+            });
+            const json = await response.json();
+            setData(json);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getArticle();
+    }, []);
+
     return (
-        <View>
-            <Text>Title</Text>
-            <TouchableOpacity
-                style = {styles.submitButton}
-                onPress = { () => {} }>
-                <Text style = {styles.submitButtonText}> Delete Article </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style = {styles.submitButton}
-                onPress = { () => navigation.navigate("AddArticle") }>
-                <Text style = {styles.submitButtonText}> Edit Article </Text>
-            </TouchableOpacity>
-            <Text>
-                Article text
-            </Text>
-            <View>
-                <YoutubePlayer
-                    height={300}
-                    play={playing}
-                    videoId={"ypxvaOhyyj8"}
-                    onChangeState={onStateChange}
-                />
-                <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
-            </View>
-        </View>
+        isLoading ? (
+                <ActivityIndicator />
+            ) :
+            (
+                <View>
+                    <Text>{data.title}</Text>
+                    <TouchableOpacity
+                        style = {styles.submitButton}
+                        onPress = { () => {deleteArticle()} }>
+                        <Text style = {styles.submitButtonText}> Delete Article </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style = {styles.submitButton}
+                        onPress = { () => navigation.navigate("AddArticle", {
+                            articleId: articleID
+                        }) }>
+                        <Text style = {styles.submitButtonText}> Edit Article </Text>
+                    </TouchableOpacity>
+                    <Text>
+                        {data.author}
+                    </Text>
+                    <Text>
+                        {data.content}
+                    </Text>
+                    <View>
+                        <YoutubePlayer
+                            height={300}
+                            play={playing}
+                            videoId={"ypxvaOhyyj8"}
+                            // videoId={data.videoLink}
+                            onChangeState={onStateChange}
+                        />
+                        <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
+                    </View>
+                </View>
+            )
     );
 }
 
