@@ -37,7 +37,7 @@ public class Article {
     @Setter
     private String videoLink;
 
-    public Article(String author, String title, String content, String videoLink) {
+    public Article(@NonNull String author, @NonNull String title, String content, String videoLink) {
         this.author = author;
         this.title = title;
         this.content = content;

@@ -14,6 +14,10 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ * Class for accessing the articles API
+ *
+ */
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {

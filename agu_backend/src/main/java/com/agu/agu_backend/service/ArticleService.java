@@ -5,6 +5,10 @@ import com.agu.agu_backend.repo.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for articles
+ *
+ */
 @Service
 public class ArticleService {
 

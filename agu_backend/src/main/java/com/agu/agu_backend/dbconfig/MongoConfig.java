@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+/**
+ * Configuration class for access to the remote MongoDB
+ *
+ */
 @Configuration
 @EnableMongoRepositories(basePackages = "com.agu.agu_backend.repo")
 public class MongoConfig extends AbstractMongoClientConfiguration {
