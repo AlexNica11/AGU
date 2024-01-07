@@ -11,6 +11,7 @@ import {
     FlatList,
 } from 'react-native';
 import {serverIp} from "../env/Variables";
+import * as SecureStore from "expo-secure-store";
 
 // const DATA = [
 //     {
@@ -50,7 +51,12 @@ export default class ArticlesScreen  extends Component {
     getArticles = async () => {
         try {
             const response = await fetch(serverIp + '/articles', {
-                method : 'GET'
+                method : 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization' : ('Bearer ' + (await SecureStore.getItemAsync("jwt" ))),
+                }
             });
             const json = await response.json();
             this.setState({data: json});

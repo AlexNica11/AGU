@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {StyleSheet, TextInput, View, Text, TouchableOpacity, Alert, ActivityIndicator} from 'react-native'
 import {serverIp} from "../env/Variables";
+import * as SecureStore from "expo-secure-store";
 
 export default class AddArticle extends Component{
     constructor(props) {
@@ -23,7 +24,12 @@ export default class AddArticle extends Component{
         if(this.props.route.params !== undefined && this.props.route.params !== null){
             try {
                 const response = await fetch(serverIp + '/articles/' + this.props.route.params.articleId, {
-                    method : 'GET'
+                    method : 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization' : ('Bearer ' + (await SecureStore.getItemAsync("jwt" ))),
+                    }
                 });
                 const json = await response.json();
                 this.setState( {articleID: json.id});
@@ -38,19 +44,20 @@ export default class AddArticle extends Component{
         this.setState( {isLoading: false});
     };
 
-    addArticle = () => {
-        if(!(this.state.title && this.state.content && this.state.videoLink)){
-            Alert.alert('Invalid input','Input fields cannot be empty');
+    addArticle = async () => {
+        if (!(this.state.title && this.state.content && this.state.videoLink)) {
+            Alert.alert('Invalid input', 'Input fields cannot be empty');
         } else {
             fetch(serverIp + '/articles' + (this.state.request === 'PUT' ? '/' + this.state.articleID : ''), {
                 method: this.state.request,
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    'Authorization': ('Bearer ' + (await SecureStore.getItemAsync("jwt"))),
                 },
                 body: JSON.stringify({
                     // author: this.state.author,
-                    author: 'newAuthor',
+                    author: await SecureStore.getItemAsync("username"),
                     title: this.state.title,
                     content: this.state.content,
                     videoLink: this.state.videoLink,

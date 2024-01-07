@@ -26,12 +26,13 @@ public class UserController {
 
     @PostMapping("/signin")
     public String login(@RequestBody @Valid LoginDto loginDto) {
-       return userService.signin(loginDto.getUsername(), loginDto.getPassword()).orElseThrow(()->
-               new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));
+        String jwt = userService.signin(loginDto.getUsername(), loginDto.getPassword()).orElseThrow(()->
+                new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));
+        return "{\"jwt\":\"" + jwt + "\"}";
     }
 
     @PostMapping("/signup")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public User signup(@RequestBody @Valid LoginDto loginDto){
         return userService.signup(loginDto.getUsername(), loginDto.getPassword(), loginDto.getFirstName(),

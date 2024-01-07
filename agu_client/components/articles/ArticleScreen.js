@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import {Alert, Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
 import {serverIp} from "../env/Variables";
+import * as SecureStore from "expo-secure-store";
 
 export default function ArticleScreen({route, navigation}) {
     const [playing, setPlaying] = useState(false);
@@ -23,7 +24,12 @@ export default function ArticleScreen({route, navigation}) {
     const deleteArticle = async () => {
         try {
             const response = await fetch(serverIp + '/articles/' + articleID, {
-                method : 'DELETE'
+                method : 'DELETE',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization' : ('Bearer ' + (await SecureStore.getItemAsync("jwt" ))),
+                }
             });
         } catch (error) {
             console.error(error);
@@ -35,7 +41,12 @@ export default function ArticleScreen({route, navigation}) {
     const getArticle = async () => {
         try {
             const response = await fetch(serverIp + '/articles/' + articleID, {
-                method : 'GET'
+                method : 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization' : ('Bearer ' + (await SecureStore.getItemAsync("jwt" ))),
+                }
             });
             const json = await response.json();
             setData(json);

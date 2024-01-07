@@ -40,6 +40,7 @@ public class WebSecurityConfiguration{
                 authorizeHttpRequests(authz ->
                         authz
                                 .requestMatchers(new AntPathRequestMatcher("/users/signin")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/users/signup")).permitAll()
                                 // Disallow everything else..
                                 .anyRequest().authenticated())
                 // Disable CSRF (cross site request forgery)

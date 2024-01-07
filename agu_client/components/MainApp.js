@@ -3,6 +3,7 @@ import React from "react";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import ArticlesScreen from "./articles/ArticlesScreen";
 import ArticlesNavigator from "./articles/ArticlesNavigator";
+import * as SecureStore from "expo-secure-store";
 
 function HomeScreen({ navigation }) {
     return (
@@ -42,7 +43,9 @@ function LogoutAlert(navigation){
         },
         {
             text: 'Ok',
-            onPress: () => {
+            onPress: async () => {
+                await SecureStore.setItemAsync("jwt", "");
+                await SecureStore.setItemAsync("username", "");
                 navigation.navigate("LogIn")
             },
         }

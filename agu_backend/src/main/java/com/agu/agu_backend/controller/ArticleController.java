@@ -4,6 +4,8 @@ import com.agu.agu_backend.model.Article;
 import com.agu.agu_backend.repo.ArticleRepository;
 import jakarta.validation.Valid;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerController.class);
     private ArticleRepository articleRepository;
 
     @Autowired
@@ -67,6 +70,19 @@ public class ArticleController {
     @DeleteMapping(path = "/{articleId}")
     public void deleteArticle(@PathVariable(value = "articleId") String articledId){
         articleRepository.deleteById(articledId);
+    }
+
+    /**
+     * Exception handler if NoSuchElementException is thrown in this Controller
+     *
+     * @param ex exception
+     * @return Error message String.
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public String return400(NoSuchElementException ex) {
+        LOGGER.error("Unable to complete transaction", ex);
+        return ex.getMessage();
     }
 
 //    @PostMapping
