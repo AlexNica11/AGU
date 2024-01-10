@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import {View, Text, TouchableOpacity, TextInput, StyleSheet, Button} from 'react-native'
+import {View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
 import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
+import {theme, Input, Block, Button, Text} from 'galio-framework';
 import MainApp from "../MainApp";
 import {serverIp} from "../env/Variables";
 
@@ -72,45 +73,56 @@ class LoginScreen extends Component {
 
     render() {
         return (
-            <View style = {styles.container}>
-                <Text>
+            <Block style = {styles.container} center >
+                <Text h6 style={{padding:5}} color="#7a42f4">
                     LogIn
                 </Text>
-                <TextInput style = {styles.input}
+                {/*<TextInput style = {styles.input}*/}
+                <Input placeholder="Username"
+                       color={"#7a42f4"}
+                       style={{ borderColor: "#9a73ef" }}
+                       // placeholderTextColor={theme.COLORS.THEME}
                            underlineColorAndroid = "transparent"
-                           placeholder = "Username"
+                           // placeholder = "Username"
                            placeholderTextColor = "#9a73ef"
                            autoCapitalize = "none"
                            onChangeText = {this.handleUsername}/>
 
-                <TextInput style = {styles.input}
+                {/*<TextInput style = {styles.input}*/}
+                <Input
+                    placeholder="Password" password viewPass
+                       color={"#7a42f4"}
+                       style={{ borderColor: "#9a73ef" }}
                            underlineColorAndroid = "transparent"
-                           placeholder = "Password"
+                           // placeholder = "Password"
                            placeholderTextColor = "#9a73ef"
                            autoCapitalize = "none"
                            onChangeText = {this.handlePassword}
-                           secureTextEntry
+                           // secureTextEntry
                 />
 
-                <TouchableOpacity
-                    style = {styles.submitButton}
+                <Button
+                    round
+                    size="large"
+                    color="#7a42f4"
+                    // style = {styles.submitButton}
                     onPress = {
                         () => this.login(this.state.username, this.state.password)
                     }>
                     <Text style = {styles.submitButtonText}> Submit </Text>
-                </TouchableOpacity>
-                <Text>
-                    Test user is: username: test, password: test
-                </Text>
+                </Button>
                 <Separator />
-                <TouchableOpacity
-                    style = {styles.submitButton}
+                <Button
+                    round
+                    size="large"
+                    color="#7a42f4"
+                    // style = {styles.submitButton}
                     onPress = {
                         () => this.props.navigation.navigate("SignUp")
                     }>
                     <Text style = {styles.submitButtonText}> Create a new account </Text>
-                </TouchableOpacity>
-            </View>
+                </Button>
+            </Block>
         )
     }
 }

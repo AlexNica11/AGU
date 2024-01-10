@@ -30,7 +30,8 @@
     "react-native-youtube-iframe": "^2.3.0",
     "react-native-webview" : "^13.6.3",
     "jwt-decode" : "4.0.0",
-    "core-js" : "3.35.0"
+    "core-js" : "3.35.0",
+    "galio-framework": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

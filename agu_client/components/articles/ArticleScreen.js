@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import {Alert, Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
+import {Alert, StyleSheet, TouchableOpacity, View, ActivityIndicator, ScrollView, Linking} from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
-import {serverIp} from "../env/Variables";
+import {serverIp, ytbWatchURL} from "../env/Variables";
 import * as SecureStore from "expo-secure-store";
+import {Block, Button, Text} from "galio-framework";
 
 export default function ArticleScreen({route, navigation}) {
     const [playing, setPlaying] = useState(false);
@@ -66,27 +67,20 @@ export default function ArticleScreen({route, navigation}) {
                 <ActivityIndicator />
             ) :
             (
-                <View>
-                    <Text>{data.title}</Text>
-                    <TouchableOpacity
-                        style = {styles.submitButton}
-                        onPress = { () => {deleteArticle()} }>
-                        <Text style = {styles.submitButtonText}> Delete Article </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style = {styles.submitButton}
-                        onPress = { () => navigation.navigate("AddArticle", {
-                            articleId: articleID
-                        }) }>
-                        <Text style = {styles.submitButtonText}> Edit Article </Text>
-                    </TouchableOpacity>
-                    <Text>
-                        {data.author}
-                    </Text>
-                    <Text>
-                        {data.content}
-                    </Text>
-                    <View>
+                <ScrollView style={styles.scrollView}>
+                <Block style = {{flex:1}}>
+                    <Block left>
+                        <Text h4 style={{padding:10}}>{data.title}</Text>
+                    </Block>
+                    <Block left>
+                        <Text h6 style={{padding:5}}>
+                            By: {data.author}
+                        </Text>
+                        <Text hp style={{padding:7}}>
+                            {data.content}
+                        </Text>
+                    </Block>
+                    <Block>
                         <YoutubePlayer
                             height={300}
                             play={playing}
@@ -94,9 +88,40 @@ export default function ArticleScreen({route, navigation}) {
                             // videoId={data.videoLink}
                             onChangeState={onStateChange}
                         />
-                        <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
-                    </View>
-                </View>
+                        <Block center>
+                            <Text onPress={() => Linking.openURL(ytbWatchURL + data.videoLink)}>
+                                Source: {ytbWatchURL}{data.videoLink}
+                            </Text>
+                            <Button round
+                                    size="large"
+                                    color="#7a42f4"
+                                    onPress={togglePlaying}>
+                                <Text style={styles.submitButtonText}>
+                                    {playing ? "pause" : "play"}
+                                </Text>
+                            </Button>
+                        </Block>
+                    </Block>
+                    <Block center>
+                        <Button
+                            round
+                            size="large"
+                            color="#7a42f4"
+                            onPress = { () => {deleteArticle()} }>
+                            <Text style = {styles.submitButtonText}> Delete Article </Text>
+                        </Button>
+                        <Button
+                            round
+                            size="large"
+                            color="#7a42f4"
+                            onPress = { () => navigation.navigate("AddArticle", {
+                                articleId: articleID
+                            }) }>
+                            <Text style = {styles.submitButtonText}> Edit Article </Text>
+                        </Button>
+                    </Block>
+                </Block>
+                </ScrollView>
             )
     );
 }
@@ -110,5 +135,8 @@ const styles = StyleSheet.create({
     },
     submitButtonText:{
         color: 'white'
+    },
+    scrollView:{
+        backgroundColor: '#f9c2ff',
     },
 });

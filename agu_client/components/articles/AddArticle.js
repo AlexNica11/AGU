@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import {StyleSheet, TextInput, View, Text, TouchableOpacity, Alert, ActivityIndicator} from 'react-native'
+import {StyleSheet, TextInput, View, TouchableOpacity, Alert, ActivityIndicator, ScrollView} from 'react-native'
 import {serverIp} from "../env/Variables";
 import * as SecureStore from "expo-secure-store";
+import {Block, Button, Input, Text} from "galio-framework";
 
 export default class AddArticle extends Component{
     constructor(props) {
@@ -15,7 +16,7 @@ export default class AddArticle extends Component{
         title : '',
         content : '',
         videoLink : '',
-        // pictures : [],
+        pictureLink : '',
         isLoading: true,
         request: 'POST'
     }
@@ -61,6 +62,7 @@ export default class AddArticle extends Component{
                     title: this.state.title,
                     content: this.state.content,
                     videoLink: this.state.videoLink,
+                    // pictureLink: this.state.pictureLink,
                 })
             }).catch(error => {
                 console.error(error);
@@ -78,9 +80,12 @@ export default class AddArticle extends Component{
                     <ActivityIndicator />
                 ) :
                 (
-                    <View>
-                        <Text>Add Article</Text>
-                        <TextInput style = {styles.input}
+                    <ScrollView style={styles.scrollView}>
+                    <Block style = {styles.container} center>
+                        <Text h6 style={{padding:5}} >Add Article</Text>
+                        <Input
+                               color={"#7a42f4"}
+                               style={{ borderColor: "#9a73ef" }}
                                    underlineColorAndroid = "transparent"
                                    placeholder = "Title"
                                    placeholderTextColor = "#9a73ef"
@@ -88,22 +93,42 @@ export default class AddArticle extends Component{
                                    value = {this.state.title}
                                    onChangeText = { (text) => { this.setState( {title: text} ) }}/>
 
-                        <TextInput style = {styles.input}
+                        <Input
+                            multiline
+                            maxLength={255}
+                            color={"#7a42f4"}
+                            style={{
+                                borderColor: "#9a73ef",
+                                height: 150,
+                            }}
                                    underlineColorAndroid = "transparent"
                                    placeholder = "Content"
                                    placeholderTextColor = "#9a73ef"
                                    autoCapitalize = "none"
                                    value = {this.state.content}
                                    onChangeText = { (text) => { this.setState( {content: text} ) }}/>
-                        <TextInput style = {styles.input}
+                        <Input
+                            color={"#7a42f4"}
+                            style={{ borderColor: "#9a73ef" }}
                                    underlineColorAndroid = "transparent"
                                    placeholder = "Video Url"
                                    placeholderTextColor = "#9a73ef"
                                    autoCapitalize = "none"
                                    value = {this.state.videoLink}
                                    onChangeText = { (text) => { this.setState( {videoLink: text} ) }}/>
-                        <TouchableOpacity
-                            style = {styles.submitButton}
+                        <Input
+                            color={"#7a42f4"}
+                            style={{ borderColor: "#9a73ef" }}
+                                   underlineColorAndroid = "transparent"
+                                   placeholder = "Image Url"
+                                   placeholderTextColor = "#9a73ef"
+                                   autoCapitalize = "none"
+                                   value = {this.state.pictureLink}
+                                   onChangeText = { (text) => { this.setState( {pictureLink: text} ) }}/>
+                        <Button
+                            round
+                            size="large"
+                            color="#7a42f4"
                             onPress = {
                                 () => {
                                     this.addArticle();
@@ -111,12 +136,13 @@ export default class AddArticle extends Component{
                                 }
                             }>
                             <Text style = {styles.submitButtonText}> Submit </Text>
-                        </TouchableOpacity>
+                        </Button>
                         <Text>
                             Add support for pictures{"\n"}
                             Only YouTube links are supported
                         </Text>
-                    </View>
+                    </Block>
+                    </ScrollView>
                 )
         )
     }
@@ -127,6 +153,7 @@ const styles = StyleSheet.create({
         paddingTop: 23
     },
     input: {
+        flex: 1,
         margin: 15,
         height: 40,
         borderColor: '#7a42f4',
@@ -140,5 +167,8 @@ const styles = StyleSheet.create({
     },
     submitButtonText:{
         color: 'white'
-    }
+    },
+    scrollView:{
+        backgroundColor: '#f9c2ff',
+    },
 });

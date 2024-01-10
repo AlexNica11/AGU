@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {Alert, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native'
 import {serverIp} from "../env/Variables";
+import {Block, Button, Input, theme, Text} from "galio-framework";
 
 class SignUpScreen extends Component {
     constructor(props) {
@@ -60,32 +61,40 @@ class SignUpScreen extends Component {
 
     render() {
         return (
-            <View style = {styles.container}>
-                <Text>
+            <Block style = {styles.container} center>
+                <Text h6 style={{padding:5}} color="#7a42f4">
                     SignUp
                 </Text>
-                <TextInput style = {styles.input}
+                <Input placeholder="Username"
+                       // color={theme.COLORS.THEME}
+                       color={"#7a42f4"}
+                       style={{ borderColor: "#9a73ef" }}
                            underlineColorAndroid = "transparent"
-                           placeholder = "Username"
+                           // placeholder = "Username"
                            placeholderTextColor = "#9a73ef"
                            autoCapitalize = "none"
                            onChangeText = {this.handleUsername}/>
 
-                <TextInput style = {styles.input}
+                <Input placeholder="Password" password viewPass
+                       style={{ borderColor: "#9a73ef" }}
+                       color={"#7a42f4"}
                            underlineColorAndroid = "transparent"
-                           placeholder = "Password"
+                           // placeholder = "Password"
                            placeholderTextColor = "#9a73ef"
                            autoCapitalize = "none"
                            onChangeText = {this.handlePassword}/>
 
-                <TouchableOpacity
-                    style = {styles.submitButton}
+                <Button
+                    round
+                    size="large"
+                    color="#7a42f4"
+                    // style = {styles.submitButton}
                     onPress = {
                         () => this.signup(this.state.username, this.state.password)
                     }>
                     <Text style = {styles.submitButtonText}> Submit </Text>
-                </TouchableOpacity>
-            </View>
+                </Button>
+            </Block>
         )
     }
 }
