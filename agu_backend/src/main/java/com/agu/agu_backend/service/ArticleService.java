@@ -5,6 +5,8 @@ import com.agu.agu_backend.repo.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Service class for articles
  *
@@ -19,8 +21,8 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public Article createArticle(String author, String title, String content, String videoLink){
-        return articleRepository.save(new Article(author, title, content, videoLink));
+    public Article createArticle(String author, String title, String content, List<String> sources, List<String> videoLinks, List<String> imageLinks){
+        return articleRepository.save(new Article(author, title, content, sources, videoLinks, imageLinks));
     }
 
 }

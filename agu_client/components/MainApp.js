@@ -4,6 +4,7 @@ import {createDrawerNavigator} from "@react-navigation/drawer";
 import ArticlesScreen from "./articles/ArticlesScreen";
 import ArticlesNavigator from "./articles/ArticlesNavigator";
 import * as SecureStore from "expo-secure-store";
+import FindBabyScreen from "./baby/FindBabyScreen";
 
 function HomeScreen({ navigation }) {
     return (
@@ -63,7 +64,7 @@ function MainApp () {
             <Drawer.Screen name="Home" component={HomeScreen}/>
             <Drawer.Screen name="Articles" component={ArticlesNavigator}/>
             <Drawer.Screen name="Recipes" component={ArticlesScreen}/>
-            <Drawer.Screen name="Find a baby" component={NotificationsScreen}/>
+            <Drawer.Screen name="Find a baby" component={FindBabyScreen}/>
             <Drawer.Screen name="Notifications" component={NotificationsScreen}/>
             <Drawer.Screen name="Logout" component={LogoutScreen} listeners={({navigation}) => ({
                 drawerItemPress: (e) => {

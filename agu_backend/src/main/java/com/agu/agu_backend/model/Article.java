@@ -1,6 +1,5 @@
 package com.agu.agu_backend.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -8,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 import java.util.Objects;
 
 @Document
@@ -35,13 +35,23 @@ public class Article {
 
     @Getter
     @Setter
-    private String videoLink;
+    private List<String> sources;
 
-    public Article(@NonNull String author, @NonNull String title, String content, String videoLink) {
+    @Getter
+    @Setter
+    private List<String> videoLinks;
+
+    @Getter
+    @Setter
+    private List<String> imageLinks;
+
+    public Article(@NonNull String author, @NonNull String title, String content, List<String> sources, List<String> videoLinks, List<String> imageLinks) {
         this.author = author;
         this.title = title;
         this.content = content;
-        this.videoLink = videoLink;
+        this.sources = sources;
+        this.videoLinks = videoLinks;
+        this.imageLinks = imageLinks;
     }
 
     protected Article(){
@@ -67,11 +77,12 @@ public class Article {
     @Override
     public String toString() {
         return "Article{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", videoLink='" + videoLink + '\'' +
+                ", videoLinks=" + videoLinks +
+                ", imageLinks=" + imageLinks +
                 '}';
     }
 }

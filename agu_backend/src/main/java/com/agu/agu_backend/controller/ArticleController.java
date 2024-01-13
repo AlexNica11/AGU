@@ -3,18 +3,15 @@ package com.agu.agu_backend.controller;
 import com.agu.agu_backend.model.Article;
 import com.agu.agu_backend.repo.ArticleRepository;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 /**
  * Class for accessing the articles API
@@ -47,7 +44,9 @@ public class ArticleController {
         articleRepository.save(new Article(article.getAuthor(),
                 article.getTitle(),
                 article.getContent(),
-                article.getVideoLink()));
+                article.getSources(),
+                article.getVideoLinks(),
+                article.getImageLinks()));
     }
 
     @PutMapping(path = "/{articleId}")
@@ -59,7 +58,9 @@ public class ArticleController {
             updatedArticle.setAuthor(article.getAuthor());
             updatedArticle.setTitle(article.getTitle());
             updatedArticle.setContent(article.getContent());
-            updatedArticle.setVideoLink(article.getVideoLink());
+            updatedArticle.setSources(article.getSources());
+            updatedArticle.setVideoLinks(article.getVideoLinks());
+            updatedArticle.setImageLinks(article.getImageLinks());
 
             return articleRepository.save(updatedArticle);
         } catch (NoSuchElementException exception){

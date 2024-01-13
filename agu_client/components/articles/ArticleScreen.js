@@ -1,26 +1,23 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import {Alert, StyleSheet, TouchableOpacity, View, ActivityIndicator, ScrollView, Linking} from "react-native";
+import {
+    Alert,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    ActivityIndicator,
+    ScrollView,
+    Linking,
+    FlatList, Image
+} from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
 import {serverIp, ytbWatchURL} from "../env/Variables";
 import * as SecureStore from "expo-secure-store";
 import {Block, Button, Text} from "galio-framework";
 
 export default function ArticleScreen({route, navigation}) {
-    const [playing, setPlaying] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const articleID = route.params.articleId;
-
-    const onStateChange = useCallback((state) => {
-        if (state === "ended") {
-            setPlaying(false);
-            Alert.alert("video has finished playing!");
-        }
-    }, []);
-
-    const togglePlaying = useCallback(() => {
-        setPlaying((prev) => !prev);
-    }, []);
 
     const deleteArticle = async () => {
         try {
@@ -76,31 +73,60 @@ export default function ArticleScreen({route, navigation}) {
                         <Text h6 style={{padding:5}}>
                             By: {data.author}
                         </Text>
-                        <Text hp style={{padding:7}}>
+                        <Text p style={{padding:7}}>
                             {data.content}
                         </Text>
                     </Block>
                     <Block>
-                        <YoutubePlayer
-                            height={300}
-                            play={playing}
-                            videoId={"ypxvaOhyyj8"}
-                            // videoId={data.videoLink}
-                            onChangeState={onStateChange}
-                        />
-                        <Block center>
-                            <Text onPress={() => Linking.openURL(ytbWatchURL + data.videoLink)}>
-                                Source: {ytbWatchURL}{data.videoLink}
-                            </Text>
-                            <Button round
-                                    size="large"
-                                    color="#7a42f4"
-                                    onPress={togglePlaying}>
-                                <Text style={styles.submitButtonText}>
-                                    {playing ? "pause" : "play"}
+                        {
+                            data.imageLinks.map((imageId) =>
+                                <Image
+                                    style={{
+                                        width:'100%',
+                                        height:undefined,
+                                        aspectRatio: 1,
+                                    }}
+                                    source={{
+                                        uri:imageId,
+                                    }}
+                                />
+                            )
+                        }
+                    </Block>
+                    <Block>
+                        {
+                            data.videoLinks.map((videoId) =>
+                                <YoutubePlayer
+                                    height={300}
+                                    play={false}
+                                    videoId={videoId}
+                                    // videoId={data.videoLink}
+                                    // onChangeState={onStateChange}
+                                />
+                            )
+                        }
+                    </Block>
+                    <Block style={{paddingBottom:20}}>
+                        <Text p>
+                            Images:
+                        </Text>
+                        {
+                            data.imageLinks.map((imageId) =>
+                                <Text>
+                                    {imageId}
                                 </Text>
-                            </Button>
-                        </Block>
+                            )
+                        }
+                        <Text p>
+                            Sources:
+                        </Text>
+                        {
+                            data.sources.map((source) =>
+                                <Text>
+                                    {source}
+                                </Text>
+                            )
+                        }
                     </Block>
                     <Block center>
                         <Button
