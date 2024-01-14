@@ -79,7 +79,7 @@ export default function ArticleScreen({route, navigation}) {
                     </Block>
                     <Block>
                         {
-                            data.imageLinks.map((imageId) =>
+                            data.imageLinks.map((imageId, index) =>
                                 <Image
                                     style={{
                                         width:'100%',
@@ -95,7 +95,7 @@ export default function ArticleScreen({route, navigation}) {
                     </Block>
                     <Block>
                         {
-                            data.videoLinks.map((videoId) =>
+                            data.videoLinks.map((videoId, index) =>
                                 <YoutubePlayer
                                     height={300}
                                     play={false}
@@ -111,7 +111,7 @@ export default function ArticleScreen({route, navigation}) {
                             Images:
                         </Text>
                         {
-                            data.imageLinks.map((imageId) =>
+                            data.imageLinks.map((imageId, index) =>
                                 <Text>
                                     {imageId}
                                 </Text>
@@ -121,7 +121,7 @@ export default function ArticleScreen({route, navigation}) {
                             Sources:
                         </Text>
                         {
-                            data.sources.map((source) =>
+                            data.sources.map((source, index) =>
                                 <Text>
                                     {source}
                                 </Text>

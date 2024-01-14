@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, TextInput, View, TouchableOpacity, Alert, ActivityIndicator, ScrollView} from 'react-native'
-import {serverIp} from "../env/Variables";
+import {serverIp, ytbWatchURL} from "../env/Variables";
 import * as SecureStore from "expo-secure-store";
 import {Block, Button, Input, Text} from "galio-framework";
 
@@ -15,8 +15,9 @@ export default class AddArticle extends Component{
         articleID: '',
         title : '',
         content : '',
-        videoLink : '',
-        pictureLink : '',
+        sources: [''],
+        videoLinks : [''],
+        imageLinks : [''],
         isLoading: true,
         request: 'POST'
     }
@@ -36,7 +37,9 @@ export default class AddArticle extends Component{
                 this.setState( {articleID: json.id});
                 this.setState( {title: json.title});
                 this.setState( {content: json.content});
-                this.setState( {videoLink: json.videoLink});
+                this.setState( {sources: json.sources});
+                this.setState( {videoLinks: json.videoLinks});
+                this.setState( {imageLinks: json.imageLinks});
                 this.setState( {request: 'PUT'});
             } catch (error) {
                 console.error(error);
@@ -46,7 +49,7 @@ export default class AddArticle extends Component{
     };
 
     addArticle = async () => {
-        if (!(this.state.title && this.state.content && this.state.videoLink)) {
+        if (!(this.state.title && this.state.content)) {
             Alert.alert('Invalid input', 'Input fields cannot be empty');
         } else {
             fetch(serverIp + '/articles' + (this.state.request === 'PUT' ? '/' + this.state.articleID : ''), {
@@ -61,8 +64,9 @@ export default class AddArticle extends Component{
                     author: await SecureStore.getItemAsync("username"),
                     title: this.state.title,
                     content: this.state.content,
-                    videoLink: this.state.videoLink,
-                    // pictureLink: this.state.pictureLink,
+                    sources: this.state.sources,
+                    videoLinks: this.state.videoLinks,
+                    imageLinks: this.state.imageLinks,
                 })
             }).catch(error => {
                 console.error(error);
@@ -107,24 +111,129 @@ export default class AddArticle extends Component{
                                    autoCapitalize = "none"
                                    value = {this.state.content}
                                    onChangeText = { (text) => { this.setState( {content: text} ) }}/>
-                        <Input
-                            color={"#7a42f4"}
-                            style={{ borderColor: "#9a73ef" }}
-                                   underlineColorAndroid = "transparent"
-                                   placeholder = "Video Url"
-                                   placeholderTextColor = "#9a73ef"
-                                   autoCapitalize = "none"
-                                   value = {this.state.videoLink}
-                                   onChangeText = { (text) => { this.setState( {videoLink: text} ) }}/>
-                        <Input
-                            color={"#7a42f4"}
-                            style={{ borderColor: "#9a73ef" }}
-                                   underlineColorAndroid = "transparent"
-                                   placeholder = "Image Url"
-                                   placeholderTextColor = "#9a73ef"
-                                   autoCapitalize = "none"
-                                   value = {this.state.pictureLink}
-                                   onChangeText = { (text) => { this.setState( {pictureLink: text} ) }}/>
+                        <Block style = {styles.container} center>
+                            <Text>
+                                ImageLink 0 will be used as head image for the article
+                            </Text>
+                            { this.state.imageLinks.map((source, index) => <Input
+                                color={"#7a42f4"}
+                                style={{ borderColor: "#9a73ef" }}
+                                underlineColorAndroid = "transparent"
+                                placeholder = {"ImageLink" + " " + index}
+                                placeholderTextColor = "#9a73ef"
+                                autoCapitalize = "none"
+                                value = {this.state.imageLinks.at(index)}
+                                onChangeText = { (text) => {
+                                    this.state.imageLinks[index]=text;
+                                    this.setState( {sources: this.state.imageLinks} )
+                                    // console.log(this.state.imageLinks);
+                                }}/>)}
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    this.state.imageLinks.push('')
+                                    this.setState({imageLinks: this.state.imageLinks});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Add one Image link </Text>
+                            </Button>
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    if(this.state.imageLinks.length > 1) {
+                                        this.state.imageLinks.pop();
+                                    }
+                                    this.setState({imageLinks: this.state.imageLinks});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Delete last Image link </Text>
+                            </Button>
+                        </Block>
+                        <Block style = {styles.container} center>
+                            <Text>
+                                Only YouTube links are supported
+                            </Text>
+                            { this.state.videoLinks.map((source, index) => <Input
+                                color={"#7a42f4"}
+                                style={{ borderColor: "#9a73ef" }}
+                                underlineColorAndroid = "transparent"
+                                placeholder = {"VideoLink" + " " + index}
+                                placeholderTextColor = "#9a73ef"
+                                autoCapitalize = "none"
+                                value = {this.state.videoLinks.at(index)}
+                                onChangeText = { (text) => {
+                                    this.state.videoLinks[index]=text.replace(ytbWatchURL, '');
+                                    this.setState( {videoLinks: this.state.videoLinks} )
+                                    // console.log(this.state.videoLinks);
+                                }}/>)}
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    this.state.videoLinks.push('')
+                                    this.setState({videoLinks: this.state.videoLinks});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Add one Video link </Text>
+                            </Button>
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    if(this.state.videoLinks.length > 1) {
+                                        this.state.videoLinks.pop();
+                                    }
+                                    this.setState({videoLinks: this.state.videoLinks});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Delete last Video link </Text>
+                            </Button>
+                        </Block>
+                        <Block style = {styles.container} center>
+                            { this.state.sources.map((source, index) => <Input
+                                color={"#7a42f4"}
+                                style={{ borderColor: "#9a73ef" }}
+                                underlineColorAndroid = "transparent"
+                                placeholder = {"Source" + " " + index}
+                                placeholderTextColor = "#9a73ef"
+                                autoCapitalize = "none"
+                                value = {this.state.sources.at(index)}
+                                onChangeText = { (text) => {
+                                    this.state.sources[index]=text;
+                                    this.setState( {sources: this.state.sources} )
+                                    // console.log(this.state.sources);
+                                }}/>)}
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    this.state.sources.push('')
+                                    this.setState({sources: this.state.sources});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Add one Sources link </Text>
+                            </Button>
+                            <Button
+                                round
+                                size="large"
+                                color="#7a42f4"
+                                onPress = {() => {
+                                    // this.setState( {content: this.state.content + 'text'} )
+                                    if(this.state.sources.length > 1) {
+                                        this.state.sources.pop()
+                                    }
+                                    this.setState({sources: this.state.sources});
+                                }}>
+                                <Text style = {styles.submitButtonText}> Delete last Sources link </Text>
+                            </Button>
+                        </Block>
                         <Button
                             round
                             size="large"
@@ -137,10 +246,6 @@ export default class AddArticle extends Component{
                             }>
                             <Text style = {styles.submitButtonText}> Submit </Text>
                         </Button>
-                        <Text>
-                            Add support for pictures{"\n"}
-                            Only YouTube links are supported
-                        </Text>
                     </Block>
                     </ScrollView>
                 )
