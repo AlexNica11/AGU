@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Alert, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native'
 import {serverIp} from "../env/Variables";
 import {Block, Button, Input, theme, Text} from "galio-framework";
+import {sha256} from "react-native-sha256";
 
 class SignUpScreen extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class SignUpScreen extends Component {
         this.setState({ username: text });
     }
     handlePassword = (text) => {
-        this.setState({ password: text });
+        sha256(text).then(hash => this.setState({ password: hash }));
     }
 
     signIn = async (username, password) => {

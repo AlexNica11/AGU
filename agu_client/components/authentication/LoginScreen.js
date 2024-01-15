@@ -6,6 +6,7 @@ import "core-js/stable/atob";
 import {theme, Input, Block, Button, Text} from 'galio-framework';
 import MainApp from "../MainApp";
 import {serverIp} from "../env/Variables";
+import {sha256} from "react-native-sha256";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -54,7 +55,7 @@ class LoginScreen extends Component {
         this.setState({ username: text });
     }
     handlePassword = (text) => {
-        this.setState({ password: text });
+        sha256(text).then(hash => this.setState({ password: hash }));
     }
     login = async (username, password) => {
         // enable the if and else for authentication
@@ -66,7 +67,7 @@ class LoginScreen extends Component {
             if (jwt !== "") {
                 this.props.navigation.navigate("MainApp");
             } else {
-                alert('username: ' + username + ' password: ' + password + "\nis not a valid user");
+                alert('username: ' + username  + "\nis not a valid user");
             }
         }
     }
